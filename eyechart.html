@@ -1,0 +1,92 @@
+<html>
+<head>
+ <script src="jquery-1.11.3.min.js"></script>
+ <script src="d3.min.js"></script>
+ 
+<style>
+    body {
+        background: white;
+    }
+
+    @font-face {
+        font-family: Sloan;
+        src: url("Sloan.ttf");
+    }
+    
+    @font-face {
+        font-family: Snellen;
+        src: url("Snellen.ttf");
+    }
+
+    p {
+        text-align: center;
+        font-family: Sloan;
+        color: black;
+        //font-weight: bold;
+    }
+
+</style>
+</head>
+
+<body onclick="//randomize();">
+
+
+<br />
+<div id="letters"></div>
+<script>
+
+    $(function() {
+        $("#letters").append(create(30));
+        $("#letters").append(create(25));
+        $("#letters").append(create(20));
+        $("#letters").append(create(15));
+        $("#letters").append(create(10));
+        $("#letters").append(create(7.5));
+        
+        
+        randomize();
+    });
+
+    function create(distance) {
+        var div = $(document.createElement('p'));
+        
+        var size = distance * 12 * 25.4 * Math.tan((5.0 / 60.0) * Math.PI / 180);
+        
+        var pixels = size * 1.4;
+        
+        div.attr("size", size);
+        
+        div.attr("style", "font-size: " + pixels + "mm; letter-spacing: " + pixels + "mm;");
+        
+        return div;
+    }
+
+    function randomize() {
+        d3.selectAll("p").text(function() {
+            var s = "";
+            for (var i=0; i < 7; i += 1) {
+                var c = String.fromCharCode(Math.floor((Math.random() * 26) + 65));
+                s += c;
+            }
+            return s;
+        });
+    }
+
+    function resize(scale) {
+        d3.selectAll("p").style("font-size", function() {
+            return this.getAttribute("size") * scale + "mm";
+        })
+        .style("letter-spacing", function() {
+            return this.getAttribute("size") * scale + "mm";
+        });
+    }
+    
+    function scaleChanged(event) {
+        $("#scale").text(event.target.value);
+        resize(event.target.value);
+    }
+    
+</script>
+
+</body>
+<html>
